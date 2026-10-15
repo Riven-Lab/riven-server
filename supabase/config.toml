@@ -1,0 +1,19 @@
+# Local Supabase CLI project configuration. Run `npm run db:start` to start services.
+project_id = "riven-server"
+
+[api]
+enabled = true
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[studio]
+enabled = true
+port = 54323
+
+[auth]
+enabled = true
