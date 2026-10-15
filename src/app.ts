@@ -36,6 +36,17 @@ export async function buildApp(config: AppConfig, database: SupabaseClient) {
     timeWindow: config.RATE_LIMIT_WINDOW
   });
 
+  // Give browser visits to the service URL a useful response and point clients to its public routes.
+  app.get("/", async () => ({
+    name: "Riven Analytics API",
+    status: "ok",
+    endpoints: {
+      live: "/health/live",
+      ready: "/health/ready",
+      events: "POST /v1/events"
+    }
+  }));
+
   app.get("/health/live", async () => ({ status: "ok" }));
   app.get("/health/ready", async (_request, reply) => {
     try {
