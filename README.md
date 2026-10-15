@@ -88,3 +88,16 @@ docs/
 Build the container with docker build -t riven-server . Provide SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY through the deployment platform's secret manager. Set CORS_ORIGINS only for browser clients that call this API directly. Use /health/live for process liveness and /health/ready for Supabase readiness.
 
 The API is designed as a modular monolith: ingestion, project management, and read APIs can grow as separate modules while sharing versioned contracts and migrations. See docs/architecture.md.
+
+
+### Riven Labs Supabase project
+
+The Riven Labs Supabase project is `rivenlabs` (`lxziqjghuyyekyphqtjq`) in `ap-northeast-1`, with API URL `https://lxziqjghuyyekyphqtjq.supabase.co`. The initial schema and foreign-key indexes are applied there. For future schema changes, add a versioned SQL file under `supabase/migrations/`, then link the CLI and deploy migrations:
+
+```sh
+npx supabase login
+npx supabase link --project-ref lxziqjghuyyekyphqtjq
+npm run db:deploy
+```
+
+Set `SUPABASE_URL` to the project API URL and `SUPABASE_SERVICE_ROLE_KEY` to the project's server-side secret key in the API host's secret manager. Keep the service role key private; the SDK and browser clients must never receive it. For local development, continue using the local values printed by `npm run db:start`.
