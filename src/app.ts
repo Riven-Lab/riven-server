@@ -27,7 +27,7 @@ export async function buildApp(config: AppConfig, database: SupabaseClient) {
   await app.register(cors, {
     origin: config.CORS_ORIGINS.length ? config.CORS_ORIGINS : false,
     methods: ["POST", "OPTIONS"],
-    allowedHeaders: ["content-type", "x-project-key", "x-request-id"],
+    allowedHeaders: ["content-type", "x-project-key", "x-request-id", "idempotency-key"],
     maxAge: 600
   });
   await app.register(rateLimit, {
