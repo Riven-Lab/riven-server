@@ -22,7 +22,9 @@ x-project-key: riven_live_...
 }
 ```
 
-properties may be omitted and defaults to an empty object. On acceptance, the API returns 202 with { "accepted": true, "eventId": "..." }. Invalid payloads return 400; missing, revoked, or inactive project keys return 401; oversized payloads return 413; rate-limited requests return 429.
+properties may be omitted and default to an empty object. On acceptance, the API returns 202 with { "accepted": true, "eventId": "..." }. Invalid payloads return 400; missing, revoked, or inactive project keys return 401; oversized payloads return 413; rate-limited requests return 429.
+
+For retry-safe ingestion, POST may also include Idempotency-Key. Repeating the same key and exact event returns the original eventId; using it with a different event returns 409. See [the idempotency guide](docs/idempotency.md) for details and migration rollout.
 
 The event is appended to public.events. The API hashes the project key with SHA-256 before looking it up. The plaintext key is returned once by the project creation command and cannot be recovered later.
 
