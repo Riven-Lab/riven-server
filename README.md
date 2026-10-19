@@ -126,3 +126,8 @@ Idempotency-Key: import-page-1
 ```
 
 Apply the batch migration to Supabase before deploying the server code. See [docs/idempotency.md](docs/idempotency.md) for retry semantics and rollout instructions.
+
+
+## Verification
+
+Run `npm test` for the HTTP contract tests. GitHub Actions runs the tests after typecheck and build.
