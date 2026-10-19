@@ -18,3 +18,10 @@ export const ingestionEventSchema = z.object({
 }).strict();
 
 export type IngestionEvent = z.infer<typeof ingestionEventSchema>;
+
+// Bound each transaction so a single request cannot monopolize database work.
+export const ingestionBatchSchema = z.object({
+  events: z.array(ingestionEventSchema).min(1).max(100)
+}).strict();
+
+export type IngestionBatch = z.infer<typeof ingestionBatchSchema>;
