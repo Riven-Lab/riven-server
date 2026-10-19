@@ -103,3 +103,26 @@ npm run db:deploy
 ```
 
 Set `SUPABASE_URL` to the project API URL and `SUPABASE_SERVICE_ROLE_KEY` to the project's server-side secret key in the API host's secret manager. Keep the service role key private; the SDK and browser clients must never receive it. For local development, continue using the local values printed by `npm run db:start`.
+
+
+### POST /v1/events/batch
+
+Submit 1–100 validated events per request. Batch requests require an `Idempotency-Key`; the server stores the entire batch in one Postgres transaction. If any event fails, the transaction rolls back. Retrying the same key and payload returns the original event IDs in input order. Reusing the key with changed content returns 409.
+
+```http
+POST /v1/events/batch
+Content-Type: application/json
+x-project-key: riven_live_...
+Idempotency-Key: import-page-1
+```
+
+```json
+{
+  "events": [
+    { "name": "page_view", "properties": { "path": "/" }, "timestamp": "2026-10-19T12:00:00.000Z" },
+    { "name": "signup_completed", "properties": { "method": "email" }, "timestamp": "2026-10-19T12:00:02.000Z" }
+  ]
+}
+```
+
+Apply the batch migration to Supabase before deploying the server code. See [docs/idempotency.md](docs/idempotency.md) for retry semantics and rollout instructions.
